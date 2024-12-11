@@ -1,4 +1,5 @@
-﻿
+﻿using Catalog.API.Exceptions;
+
 namespace Catalog.API.Products.UpdateProduct;
 
 public record UpdateProductCommand(Guid Id, string Name, List<string> Category, string Description, string ImageFile, decimal Price)
@@ -17,7 +18,7 @@ internal class UpdateProductCommandHandler
 
         if (product is null)
         {
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException(command.Id);
         }
 
         product.Name = command.Name;

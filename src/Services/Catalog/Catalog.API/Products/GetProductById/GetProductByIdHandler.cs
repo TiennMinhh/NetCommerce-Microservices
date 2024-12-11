@@ -1,4 +1,6 @@
-﻿namespace Catalog.API.Products.GetProductById;
+﻿using Catalog.API.Exceptions;
+
+namespace Catalog.API.Products.GetProductById;
 
 public record GetProductByIdQuery(Guid Id) : IQuery<GetProductByIdResult>;
 public record GetProductByIdResult(Product Product);
@@ -15,7 +17,7 @@ internal class GetProductByIdQueryHandler
 
         if (product is null)
         {
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException(query.Id);
         }
 
         return new GetProductByIdResult(product);
