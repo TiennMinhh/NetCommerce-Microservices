@@ -1,4 +1,5 @@
 using BuildingBlock.Behaviors;
+using BuildingBlock.Exceptions.Handler;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,8 @@ builder.Services.AddMarten(opts =>
     opts.Connection(builder.Configuration.GetConnectionString("Database")!);
 }).UseLightweightSessions();
 
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,8 +28,10 @@ app.MapCarter();
 
 if (builder.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+    //app.UseDeveloperExceptionPage();
     app.MapOpenApi();
 }
+
+app.UseExceptionHandler(options => { });
 
 app.Run();
