@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace BuildingBlocks.CQRS;
+namespace BuildingBlock.CQRS;
 
 public interface ICommandHandler<in TCommand> 
     : ICommandHandler<TCommand, Unit>
