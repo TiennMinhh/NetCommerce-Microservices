@@ -9,14 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var assembly = typeof(Program).Assembly;
 var dbConnectionString = builder.Configuration.GetConnectionString("Database")!;
+
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(assembly);
     config.AddOpenBehavior(typeof(ValidationBehavior<,>));
     config.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
-builder.Services.AddValidatorsFromAssembly(assembly);
 
+builder.Services.AddValidatorsFromAssembly(assembly);
 builder.Services.AddCarter();
 
 builder.Services.AddMarten(opts =>
@@ -30,9 +31,9 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
-
 builder.Services.AddHealthChecks()
     .AddNpgSql(dbConnectionString);
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
@@ -43,6 +44,7 @@ if (builder.Environment.IsDevelopment())
 {
     //app.UseDeveloperExceptionPage();
     app.MapOpenApi();
+    
 }
 
 app.UseExceptionHandler(options => { });
